@@ -13,4 +13,5 @@ let attendence = data.set("Timna", {
     amount: "2",
     isComming:true
 })
-// console.log(data);
+console.log(data);
+console.log(attendence);
