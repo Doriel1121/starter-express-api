@@ -8,6 +8,7 @@ const app = express()
 //     console.log("Just got a request!")
 //     res.send('Yo!')
 // })
+console.log(process.env.USER_NAME);
 app.listen(process.env.PORT || 3000)
 
 mongo.connect(`mongodb+srv://${process.env.USER_NAME}:${process.env.DB_PASSWORD}@barberapp.tsqai.mongodb.net/myFirstDatabase?retryWrites=true&w=majority` , (res)=> {
@@ -26,6 +27,16 @@ app.get('/arrival' , (req , res) => {
     }
 )
 })
+
+app.get('/arrival/:phone' , (req , res) => {
+    console.log(req.params.phone);
+    Attendence.getAtendenceByPhone(req.params.phone , res , single => {
+        console.log(single);
+        res.send(single);
+    }
+)
+})
+
 app.post('/newArrival' , (req , res) => {
     console.log('random text');
     console.log(req.body);
