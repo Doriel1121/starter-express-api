@@ -10,7 +10,7 @@ const app = express()
 // })
 app.listen(process.env.PORT || 3000)
 
-mongo.connect("mongodb+srv://winner:Dor0305@barberapp.tsqai.mongodb.net/myFirstDatabase?retryWrites=true&w=majority" , (res)=> {
+mongo.connect(`mongodb+srv://${process.env.USER_NAME}:${process.env.DB_PASSWORD}@barberapp.tsqai.mongodb.net/myFirstDatabase?retryWrites=true&w=majority` , (res)=> {
 })
 mongo.connection.on('open', function (ref) {
     console.log('Connected to mongo server.')
