@@ -17,12 +17,12 @@ exports.getAtendence = async (req , res, callback) =>{
     }
 }
 exports.setAtendence = async (req , res, callback) =>{
-    console.log("new");
+    console.log(req);
     const newAtendence = new Attendence({
-        Name: 'Timna',
-        Phone: '0546171451',
-        Amount: '1',
-        isComming:true
+        Name: req.name,
+        Phone: req.phone,
+        Amount: req.amount,
+        isComming:req.isComming
     });
     newAtendence.save()
     .then(data => {
