@@ -1,11 +1,13 @@
 const Attendence = require("./models/Attendence");
+const fs = require('fs')
 
 
 exports.getAtendence = async (req , res, callback) =>{
     try{
         const attendence = await Attendence.find();
         console.log(attendence);
-        callback(attendence);
+        const amount = await handleAttendanceList(attendence);
+        callback(amount);
         res.json(attendence);
     }
     catch {
@@ -29,7 +31,7 @@ exports.getAtendenceByPhone = async (req , res, callback) => {
     // }
 
 }
-exports.setAtendence = async (req , res, callback) =>{
+exports.setAtendence = async (req , res, callback) => {
     const isExist = await Attendence.exists({Phone:req.phone});
     if (!isExist) {
         const newAtendence = new Attendence({
@@ -55,5 +57,17 @@ exports.setAtendence = async (req , res, callback) =>{
             console.log(err);
             callback(err)});
     }
+}
 
+function handleAttendanceList(list) {
+    let summerize = [];
+    let comming = 0;
+    let notComming = 0;
+    list.map((one) => {
+        one.isComming ? comming++ : notComming++;
+    })
+    const text = `כמות אנשים שעידכנו שמגיעים: ${comming} <br/>
+     כמות אנשים שעידכנו שלא מגיעים: ${notComming}<br/>
+      כמות אנשים שלא עידכנו: ${100 - list.length}`
+    return text;
 }
