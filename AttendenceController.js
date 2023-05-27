@@ -16,18 +16,21 @@ exports.getAtendence = async (req , res, callback) =>{
 }
 
 exports.getAtendenceByPhone = async (req , res, callback) => {
-    const isExist = await Attendence.exists({Phone:req});
-    if (!isExist) {
+    // const isExist = await Attendence.exists({Phone:req})
+    // console.log(isExist);
+    // if (!isExist) {
         const attendence = await Attendence.find({Phone:req});
         console.log(attendence);
-        callback({isExist:false})
-    } else {
-        callback({isExist:true})
-    }
+        callback(attendence)
+    // } else {
+    //     const attendence = await Attendence.find({Phone:req});
+    //     console.log(attendence);
+    //     callback(attendence)
+    // }
 
 }
 exports.setAtendence = async (req , res, callback) =>{
-    const isExist = await Attendence.exists({Phone:req.phone});;
+    const isExist = await Attendence.exists({Phone:req.phone});
     if (!isExist) {
         const newAtendence = new Attendence({
             Name: req.name,
