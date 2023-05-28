@@ -18,10 +18,11 @@
   "homepage": "https://github.com/cyclic-software/starter-express-api#readme",
   "dependencies": {
     "@cyclic.sh/dynamodb": "0.0.33",
-    "express": "^4.17.1",
-    "mongoose": "^6.3.0",
+    "aws-sdk": "^2.1386.0",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^6.3.0",
     "nodemon": "2.0.22"
   }
 }
