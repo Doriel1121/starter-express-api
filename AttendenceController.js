@@ -8,8 +8,8 @@ exports.getAtendence = async (req , res, callback) =>{
         const attendence = await Attendence.find();
         console.log(attendence);
         const amount = await handleAttendanceList(attendence);
-        const newLocal = 'https://vivacious-tweed-jacket-jay.cyclic.app/arrival/attendances.txt';
-        downloadFile(newLocal);
+        const newLocal = 'https://vivacious-tweed-jacket-jay.cyclic.app/arrival/attendances.html';
+        downloadFile(newLocal , attendence);
         callback(amount);
         res.json(attendence);
     }
@@ -76,14 +76,20 @@ function handleAttendanceList(list) {
 }
 
 
-function downloadFile(url) {
+function downloadFile(url , attendence) {
     console.log('-------------------------------------------------------------');
     const filename = path.basename(url);
     console.log(filename);
     https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', (res) => {
-        const fileStream = fs.createWriteStream(filename);
+        const fileStream = fs.createWriteStream('attendances.txt');
         console.log(url);
-        res.pipe(fileStream);
+        fileStream.write('מגיעים:' + '\n');
+        attendence.forEach(function(v) { 
+            console.log(v.Name);
+            fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone +  '\n' : ''); 
+        });
+
+        // res.pipe(fileStream);
 
         fileStream.on('finish', () => {
             fileStream.close();

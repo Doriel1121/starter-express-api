@@ -22,29 +22,25 @@ app
 app.get('/arrival' , (req , res) => {
     console.log(req.body);
     Attendence.getAtendence(req.body , res , allAttendence => {
-        console.log(allAttendence);
         res.send(allAttendence);
-    }
-)
+    })
+    res.download('attendances.txt', err => console.log(err))
 })
 
 app.get('/arrival/:phone' , (req , res) => {
     console.log(req.params.phone);
     Attendence.getAtendenceByPhone(req.params.phone , res , single => {
         console.log(single);
-        res.send(single);
-    }
-)
+        res.json(single);
+    })
 })
 
 app.post('/newArrival' , (req , res) => {
-    console.log('random text');
     console.log(req.body);
     Attendence.setAtendence(req.body , res , allAttendence => {
         console.log(allAttendence);
         res.send(allAttendence);
-    }
-)
+    })
 })
 // const CommingCollection = db.collection("Comming");
 // let attendence = await  CommingCollection.set("Timna", {
