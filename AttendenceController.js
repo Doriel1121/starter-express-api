@@ -1,12 +1,15 @@
 const Attendence = require("./models/Attendence");
-const fs = require('fs')
-
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
 
 exports.getAtendence = async (req , res, callback) =>{
     try{
         const attendence = await Attendence.find();
         console.log(attendence);
         const amount = await handleAttendanceList(attendence);
+        const newLocal = 'https://vivacious-tweed-jacket-jay.cyclic.app/arrival/attendances.txt';
+        downloadFile(newLocal);
         callback(amount);
         res.json(attendence);
     }
@@ -60,7 +63,6 @@ exports.setAtendence = async (req , res, callback) => {
 }
 
 function handleAttendanceList(list) {
-    let summerize = [];
     let comming = 0;
     let notComming = 0;
     list.map((one) => {
@@ -68,6 +70,24 @@ function handleAttendanceList(list) {
     })
     const text = `כמות אנשים שעידכנו שמגיעים: ${comming} <br/>
      כמות אנשים שעידכנו שלא מגיעים: ${notComming}<br/>
-      כמות אנשים שלא עידכנו: ${100 - list.length}`
+      כמות אנשים שלא עידכנו: ${100 - list.length}<br/>
+      `
     return text;
+}
+
+
+function downloadFile(url) {
+    console.log('-------------------------------------------------------------');
+    const filename = path.basename(url);
+    console.log(filename);
+    https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', (res) => {
+        const fileStream = fs.createWriteStream(filename);
+        console.log(url);
+        res.pipe(fileStream);
+
+        fileStream.on('finish', () => {
+            fileStream.close();
+            console.log('Download finished')
+        });
+    })
 }
