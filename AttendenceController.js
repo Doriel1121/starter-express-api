@@ -2,6 +2,8 @@ const Attendence = require("./models/Attendence");
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const AWS = require("aws-sdk");
+const s3 = new AWS.S3()
 
 exports.getAtendence = async (req , res, callback) =>{
     try{
@@ -76,11 +78,11 @@ function handleAttendanceList(list) {
 }
 
 
-function downloadFile(url , attendence) {
+function downloadFile (url , attendence) {
     console.log('-------------------------------------------------------------');
     const filename = path.basename(url);
     console.log(filename);
-    https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', (res) => {
+    https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', async (res) => {
         const fileStream = fs.createWriteStream('attendances.txt');
         console.log(url);
         fileStream.write('מגיעים:' + '\n');
@@ -88,6 +90,18 @@ function downloadFile(url , attendence) {
             console.log(v.Name);
             fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone +  '\n' : ''); 
         });
+        await s3.putObject({
+            Body: JSON.stringify({key:"value"}),
+            Bucket: process.env.CYCLIC_BUCKET_NAME,
+            Key: "attendances.txt",
+        }).promise()
+
+        let my_file = await s3.getObject({
+            Bucket: process.env.CYCLIC_BUCKET_NAME,
+            Key: "attendances.txt",
+        }).promise()
+console.log('testing-----------------------------------');
+console.log(JSON.parse(my_file))
 
         // res.pipe(fileStream);
 
