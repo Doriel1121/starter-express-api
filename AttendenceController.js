@@ -72,7 +72,7 @@ function handleAttendanceList(list) {
     })
     const text = `כמות אנשים שעידכנו שמגיעים: ${comming} <br/>
      כמות אנשים שעידכנו שלא מגיעים: ${notComming}<br/>
-      כמות אנשים שלא עידכנו: ${100 - list.length}<br/>
+      כמות אנשים שלא עידכנו: ${113 - list.length}<br/>
       `
     return text;
 }
@@ -85,10 +85,11 @@ function downloadFile (url , attendence) {
     https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', async (res) => {
         const fileStream = fs.createWriteStream('attendances.txt');
         console.log(url);
-        fileStream.write('מגיעים:' + '\n');
+        fileStream.write(' כמות המגיעים:' + attendence.length +  '\n');
+        fileStream.write('רשימת מאשרי הגעה:' +  '\n');
         attendence.forEach(function(v) { 
             console.log(v.Name);
-            fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone +  '\n' : ''); 
+            fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
         });
         await s3.putObject({
             Body: JSON.stringify({key:"value"}),
