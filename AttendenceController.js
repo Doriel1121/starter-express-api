@@ -83,7 +83,7 @@ function downloadFile (url , attendence) {
     const filename = path.basename(url);
     console.log(filename);
     https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', async (res) => {
-        const fileStream = fs.createWriteStream('attendances.txt');
+        const fileStream = fs.createWriteStream('attendances.txt',{flags: 'w'});
         console.log(url);
         let counter = 0;
         attendence.forEach((single) => counter = counter + Number(single.Amount));
