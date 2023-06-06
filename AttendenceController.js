@@ -10,7 +10,7 @@ exports.getAtendence = async (req , res, callback) =>{
         const attendence = await Attendence.find();
         console.log(attendence);
         const amount = await handleAttendanceList(attendence);
-        const newLocal = 'https://vivacious-tweed-jacket-jay.cyclic.app/arrival/attendances.html';
+        const newLocal = 'https://vivacious-tweed-jacket-jay.cyclic.app/arrival/';
         downloadFile(newLocal , attendence);
         callback(amount);
         res.json(attendence);
