@@ -40,7 +40,6 @@ app.get('/arrival/:phone' , (req , res) => {
 app.post('/newArrival' , (req , res) => {
     console.log(req.body);
     Attendence.setAtendence(req.body , res , allAttendence => {
-        console.log(allAttendence);
         res.send(allAttendence);
     })
 })

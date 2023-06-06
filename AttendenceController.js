@@ -83,8 +83,7 @@ function downloadFile (url , attendence , response ) {
     console.log(filename);
     https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', async (res) => {
         const fileStream = fs.createWriteStream('attendances.txt',{flags: 'w'});
-        res.pipe(fileStream);
-        console.log(res);
+        // res.pipe(fileStream);
         let counter = 0;
         attendence.forEach((single) => counter = counter + Number(single.Amount));
         fileStream.write(' כמות המגיעים סך הכל: ' + counter +  '\n');
@@ -93,6 +92,7 @@ function downloadFile (url , attendence , response ) {
             console.log(v.Name);
             fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
         });
+        res.pipe(fileStream);
         // fileStream.end();
         // await s3.putObject({
         //     Body: JSON.stringify({key:"value"}),
