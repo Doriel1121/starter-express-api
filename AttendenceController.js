@@ -92,7 +92,7 @@ function downloadFile (url , attendence , response ) {
             console.log(v.Name);
             fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
         });
-        res.pipe(fileStream);
+        // res.pipe(fileStream);
         // fileStream.end();
         // await s3.putObject({
         //     Body: JSON.stringify({key:"value"}),
