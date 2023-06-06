@@ -9,11 +9,11 @@ exports.getAtendence = async (req , res, callback) =>{
     try{
         const attendence = await Attendence.find();
         console.log(attendence);
-        // const amount = await handleAttendanceList(attendence);
+        const amount = handleAttendanceList(attendence);
         const newLocal = 'https://vivacious-tweed-jacket-jay.cyclic.app/arrival/';
-        downloadFile(newLocal , attendence , res);
-        // callback(amount);
-        // res.json(attendence);
+        // downloadFile(newLocal , attendence , res);
+        res.send(amount);
+        callback(amount);
     }
     catch {
         error => {
@@ -63,59 +63,45 @@ exports.setAtendence = async (req , res, callback) => {
     }
 }
 
-// function handleAttendanceList(list) {
-//     let comming = 0;
-//     let notComming = 0;
-//     list.map((one) => {
-//         one.isComming ? comming++ : notComming++;
-//     })
-//     const text = `כמות אנשים שעידכנו שמגיעים: ${comming} <br/>
-//      כמות אנשים שעידכנו שלא מגיעים: ${notComming}<br/>
-//       כמות אנשים שלא עידכנו: ${113 - list.length}<br/>
-//       `
-//     return text;
-// }
-
-
-function downloadFile (url , attendence , response ) {
-    console.log('-------------------------------------------------------------');
-    const filename = path.basename(url);
-    console.log(filename);
-    https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', async (res) => {
-        const fileStream = fs.createWriteStream('attendances.txt',{flags: 'w'});
-        // res.pipe(fileStream);
-        let counter = 0;
-        attendence.forEach((single) => counter = counter + Number(single.Amount));
-        fileStream.write(' כמות המגיעים סך הכל: ' + counter +  '\n');
-        fileStream.write(' רשימת מאשרי הגעה: ' +  '\n');
-        attendence.forEach(function(v, index) { 
-            console.log(v.Name);
-            fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
-        });
-        // res.pipe(fileStream);
-        // fileStream.end();
-        // await s3.putObject({
-        //     Body: JSON.stringify({key:"value"}),
-        //     Bucket: 'cyclic-vivacious-tweed-jacket-jay-us-east-1',
-        //     Key: "attendances.txt",
-        // }).promise();
-
-        // let my_file = await s3.getObject({
-        //     Bucket: 'cyclic-vivacious-tweed-jacket-jay-us-east-1',
-        //     Key: "attendances.txt",
-        // }).promise()
-        // res.pipe(fileStream);
-        // console.log(JSON.parse(my_file))
-        fileStream.on('error', (err) => {
-            console.log('some error occured')
-            console.log(err);
-            // fileStream.close();
-        }); 
-
-        fileStream.on('finish', () => {
-            console.log('Download finished')
-            response.download('attendances.txt', err => console.log(err))
-            fileStream.close();
-        });        
+    function handleAttendanceList(list) {
+    let comming = 0;
+    let notComming = 0;
+    list.map((one) => {
+        one.isComming ? comming++ : notComming++;
     })
+    const text = `כמות אנשים שעידכנו שמגיעים: ${comming} <br/>
+     כמות אנשים שעידכנו שלא מגיעים: ${notComming}<br/>
+      כמות אנשים שלא עידכנו: ${113 - list.length}<br/>
+      `
+    return text;
 }
+
+
+// function downloadFile (url , attendence , response ) {
+//     console.log('-------------------------------------------------------------');
+//     const filename = path.basename(url);
+//     console.log(filename);
+//     https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', async (res) => {
+//         const fileStream = fs.createWriteStream('attendances.txt',{flags: 'w'});
+//         // res.pipe(fileStream);
+//         let counter = 0;
+//         attendence.forEach((single) => counter = counter + Number(single.Amount));
+//         fileStream.write(' כמות המגיעים סך הכל: ' + counter +  '\n');
+//         fileStream.write(' רשימת מאשרי הגעה: ' +  '\n');
+//         attendence.forEach(function(v, index) { 
+//             console.log(v.Name);
+//             fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
+//         });
+//         // res.pipe(fileStream);
+//         fileStream.on('error', (err) => {
+//             console.log('some error occured')
+//             console.log(err);
+//         }); 
+
+//         fileStream.on('finish', () => {
+//             console.log('Download finished')
+//             response.download('attendances.txt', err => console.log(err))
+//             fileStream.close();
+//         });        
+//     })
+// }
