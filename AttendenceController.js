@@ -11,7 +11,18 @@ exports.getAtendence = async (req , res, callback) =>{
         console.log(attendence);
         // const amount = handleAttendanceList(attendence);
         const newLocal = 'https://easy-cyan-lizard-robe.cyclic.app/arrival/attendances.txt';
-        downloadFile(newLocal , attendence , res);
+
+        let counter = 0;
+        attendence.forEach((single) => counter = counter + Number(single.Amount));
+        let text = [' כמות המגיעים סך הכל: ' + counter +  '<br/>' + ' רשימת מאשרי הגעה: ' +  '<br/>'];
+        attendence.forEach((v, index) => { 
+            console.log(v.Name);
+            v.isComming ? text.push( v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '<br/>') : null;
+            // fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
+        });
+        res.send(text.join())
+
+        // downloadFile(newLocal , attendence , res);
         // res.send(amount);
         // callback(amount);
     }
@@ -81,11 +92,11 @@ function downloadFile (url , attendence , response ) {
     console.log('-------------------------------------------------------------');
     const filename = path.basename(url);
     console.log(filename);
-    https.get('https://easy-cyan-lizard-robe.cyclic.app/arrival', async (res) => {
+    https.get('https://easy-cyan-lizard-robe.cyclic.app/arrival', (res) => {
         const fileStream = fs.createWriteStream('attendances.txt',{flags: 'w'});
         res.pipe(fileStream);
         let counter = 0;
-        let text = [];
+        let text = [' כמות המגיעים סך הכל: ' + counter +  '\n' + ' רשימת מאשרי הגעה: ' +  '\n'];
         attendence.forEach((single) => counter = counter + Number(single.Amount));
         fileStream.write(' כמות המגיעים סך הכל: ' + counter +  '\n' + ' רשימת מאשרי הגעה: ' +  '\n');
         attendence.forEach((v, index) => { 
