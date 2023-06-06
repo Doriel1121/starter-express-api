@@ -10,7 +10,7 @@ exports.getAtendence = async (req , res, callback) =>{
         const attendence = await Attendence.find();
         console.log(attendence);
         // const amount = handleAttendanceList(attendence);
-        const newLocal = 'https://vivacious-tweed-jacket-jay.cyclic.app/arrival/';
+        const newLocal = 'https://easy-cyan-lizard-robe.cyclic.app/arrival/';
         downloadFile(newLocal , attendence , res);
         // res.send(amount);
         // callback(amount);
@@ -81,7 +81,7 @@ function downloadFile (url , attendence , response ) {
     console.log('-------------------------------------------------------------');
     const filename = path.basename(url);
     console.log(filename);
-    https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', async (res) => {
+    https.get('https://easy-cyan-lizard-robe.cyclic.app/arrival', async (res) => {
         const fileStream = fs.createWriteStream('attendances.txt',{flags: 'w'});
         res.pipe(fileStream);
         let counter = 0;
