@@ -12,7 +12,7 @@ exports.getAtendence = async (req , res, callback) =>{
         const amount = await handleAttendanceList(attendence);
         const newLocal = 'https://vivacious-tweed-jacket-jay.cyclic.app/arrival/';
         downloadFile(newLocal , attendence , res);
-        callback(amount);
+        // callback(amount);
         // res.json(attendence);
     }
     catch {
@@ -83,15 +83,17 @@ function downloadFile (url , attendence , response ) {
     console.log(filename);
     https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', async (res) => {
         const fileStream = fs.createWriteStream('attendances.txt',{flags: 'w'});
-        console.log(url);
+        res.pipe(fileStream);
+        console.log(res);
         let counter = 0;
         attendence.forEach((single) => counter = counter + Number(single.Amount));
         fileStream.write(' כמות המגיעים סך הכל: ' + counter +  '\n');
         fileStream.write(' רשימת מאשרי הגעה: ' +  '\n');
-        attendence.forEach(function(v) { 
+        attendence.forEach(function(v, index) { 
             console.log(v.Name);
             fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
         });
+        // fileStream.end();
         // await s3.putObject({
         //     Body: JSON.stringify({key:"value"}),
         //     Bucket: 'cyclic-vivacious-tweed-jacket-jay-us-east-1',
@@ -104,13 +106,15 @@ function downloadFile (url , attendence , response ) {
         // }).promise()
         // res.pipe(fileStream);
         // console.log(JSON.parse(my_file))
-        fileStream.on('error', () => {
+        fileStream.on('error', (err) => {
             console.log('some error occured')
+            console.log(err);
             // fileStream.close();
         }); 
 
         fileStream.on('finish', () => {
             console.log('Download finished')
+            response.download('attendances.txt', err => console.log(err))
             fileStream.close();
         });        
     })
