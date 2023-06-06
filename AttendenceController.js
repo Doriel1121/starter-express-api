@@ -9,10 +9,10 @@ exports.getAtendence = async (req , res, callback) =>{
     try{
         const attendence = await Attendence.find();
         console.log(attendence);
-        const amount = handleAttendanceList(attendence);
+        // const amount = handleAttendanceList(attendence);
         const newLocal = 'https://vivacious-tweed-jacket-jay.cyclic.app/arrival/';
         downloadFile(newLocal , attendence , res);
-        res.send(amount);
+        // res.send(amount);
         // callback(amount);
     }
     catch {
@@ -63,18 +63,18 @@ exports.setAtendence = async (req , res, callback) => {
     }
 }
 
-    function handleAttendanceList(list) {
-    let comming = 0;
-    let notComming = 0;
-    list.map((one) => {
-        one.isComming ? comming++ : notComming++;
-    })
-    const text = `כמות אנשים שעידכנו שמגיעים: ${comming} <br/>
-     כמות אנשים שעידכנו שלא מגיעים: ${notComming}<br/>
-      כמות אנשים שלא עידכנו: ${113 - list.length}<br/>
-      `
-    return text;
-}
+//     function handleAttendanceList(list) {
+//     let comming = 0;
+//     let notComming = 0;
+//     list.map((one) => {
+//         one.isComming ? comming++ : notComming++;
+//     })
+//     const text = `כמות אנשים שעידכנו שמגיעים: ${comming} <br/>
+//      כמות אנשים שעידכנו שלא מגיעים: ${notComming}<br/>
+//       כמות אנשים שלא עידכנו: ${113 - list.length}<br/>
+//       `
+//     return text;
+// }
 
 
 function downloadFile (url , attendence , response ) {
@@ -83,7 +83,7 @@ function downloadFile (url , attendence , response ) {
     console.log(filename);
     https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', async (res) => {
         const fileStream = fs.createWriteStream('attendances.txt',{flags: 'w'});
-        // res.pipe(fileStream);
+        res.pipe(fileStream);
         let counter = 0;
         let text = [];
         attendence.forEach((single) => counter = counter + Number(single.Amount));
@@ -96,15 +96,15 @@ function downloadFile (url , attendence , response ) {
         fileStream.write(text.join()); 
         console.log(text.join());
         // // res.pipe(fileStream);
-        // fileStream.on('error', (err) => {
-        //     console.log('some error occured')
-        //     console.log(err);
-        // }); 
+        fileStream.on('error', (err) => {
+            console.log('some error occured')
+            console.log(err);
+        }); 
 
-        // fileStream.on('finish', () => {
-        //     console.log('Download finished')
-        //     response.download('attendances.txt', err => console.log(err))
-        //     fileStream.close();
-        // });        
+        fileStream.on('finish', () => {
+            console.log('Download finished')
+            response.download('attendances.txt', err => console.log(err))
+            fileStream.close();
+        });        
     })
 }
