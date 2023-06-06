@@ -87,8 +87,8 @@ function downloadFile (url , attendence) {
         console.log(url);
         let counter = 0;
         attendence.forEach((single) => counter = counter + Number(single.Amount));
-        fileStream.write(' כמות המגיעים:' + counter +  '\n');
-        fileStream.write('רשימת מאשרי הגעה:' +  '\n');
+        fileStream.write(' כמות המגיעים סך הכל: ' + counter +  '\n');
+        fileStream.write(' רשימת מאשרי הגעה: ' +  '\n');
         attendence.forEach(function(v) { 
             console.log(v.Name);
             fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
@@ -97,12 +97,14 @@ function downloadFile (url , attendence) {
             Body: JSON.stringify({key:"value"}),
             Bucket: process.env.CYCLIC_BUCKET_NAME,
             Key: "attendances.txt",
-        }).promise()
+        }).promise();
+
         let my_file = await s3.getObject({
             Bucket: process.env.CYCLIC_BUCKET_NAME,
             Key: "attendances.txt",
         }).promise()
         res.pipe(fileStream);
+        console.log(JSON.parse(my_file))
 
         fileStream.on('finish', () => {
             fileStream.close();
