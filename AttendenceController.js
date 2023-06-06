@@ -9,7 +9,7 @@ exports.getAtendence = async (req , res, callback) =>{
     try{
         const attendence = await Attendence.find();
         console.log(attendence);
-        const amount = await handleAttendanceList(attendence);
+        // const amount = await handleAttendanceList(attendence);
         const newLocal = 'https://vivacious-tweed-jacket-jay.cyclic.app/arrival/';
         downloadFile(newLocal , attendence , res);
         // callback(amount);
@@ -63,18 +63,18 @@ exports.setAtendence = async (req , res, callback) => {
     }
 }
 
-function handleAttendanceList(list) {
-    let comming = 0;
-    let notComming = 0;
-    list.map((one) => {
-        one.isComming ? comming++ : notComming++;
-    })
-    const text = `כמות אנשים שעידכנו שמגיעים: ${comming} <br/>
-     כמות אנשים שעידכנו שלא מגיעים: ${notComming}<br/>
-      כמות אנשים שלא עידכנו: ${113 - list.length}<br/>
-      `
-    return text;
-}
+// function handleAttendanceList(list) {
+//     let comming = 0;
+//     let notComming = 0;
+//     list.map((one) => {
+//         one.isComming ? comming++ : notComming++;
+//     })
+//     const text = `כמות אנשים שעידכנו שמגיעים: ${comming} <br/>
+//      כמות אנשים שעידכנו שלא מגיעים: ${notComming}<br/>
+//       כמות אנשים שלא עידכנו: ${113 - list.length}<br/>
+//       `
+//     return text;
+// }
 
 
 function downloadFile (url , attendence , response ) {

@@ -25,7 +25,7 @@ app.get('/arrival' , async (req , response) => {
         console.log('sssss');
         // response.download('attendances.txt', err => console.log(err))
     })
-        response.download('attendances.txt', err => console.log(err))
+        // response.download('attendances.txt', err => console.log(err))
 })
 
 app.get('/arrival/:phone' , (req , res) => {
