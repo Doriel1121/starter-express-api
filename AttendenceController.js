@@ -11,9 +11,9 @@ exports.getAtendence = async (req , res, callback) =>{
         console.log(attendence);
         const amount = handleAttendanceList(attendence);
         const newLocal = 'https://vivacious-tweed-jacket-jay.cyclic.app/arrival/';
-        // downloadFile(newLocal , attendence , res);
+        downloadFile(newLocal , attendence , res);
         res.send(amount);
-        callback(amount);
+        // callback(amount);
     }
     catch {
         error => {
@@ -77,31 +77,31 @@ exports.setAtendence = async (req , res, callback) => {
 }
 
 
-// function downloadFile (url , attendence , response ) {
-//     console.log('-------------------------------------------------------------');
-//     const filename = path.basename(url);
-//     console.log(filename);
-//     https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', async (res) => {
-//         const fileStream = fs.createWriteStream('attendances.txt',{flags: 'w'});
-//         // res.pipe(fileStream);
-//         let counter = 0;
-//         attendence.forEach((single) => counter = counter + Number(single.Amount));
-//         fileStream.write(' כמות המגיעים סך הכל: ' + counter +  '\n');
-//         fileStream.write(' רשימת מאשרי הגעה: ' +  '\n');
-//         attendence.forEach(function(v, index) { 
-//             console.log(v.Name);
-//             fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
-//         });
-//         // res.pipe(fileStream);
-//         fileStream.on('error', (err) => {
-//             console.log('some error occured')
-//             console.log(err);
-//         }); 
+function downloadFile (url , attendence , response ) {
+    console.log('-------------------------------------------------------------');
+    const filename = path.basename(url);
+    console.log(filename);
+    https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', async (res) => {
+        // const fileStream = fs.createWriteStream('attendances.txt',{flags: 'w'});
+        // // res.pipe(fileStream);
+        // let counter = 0;
+        // attendence.forEach((single) => counter = counter + Number(single.Amount));
+        // fileStream.write(' כמות המגיעים סך הכל: ' + counter +  '\n');
+        // fileStream.write(' רשימת מאשרי הגעה: ' +  '\n');
+        // attendence.forEach(function(v, index) { 
+        //     console.log(v.Name);
+        //     fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
+        // });
+        // // res.pipe(fileStream);
+        // fileStream.on('error', (err) => {
+        //     console.log('some error occured')
+        //     console.log(err);
+        // }); 
 
-//         fileStream.on('finish', () => {
-//             console.log('Download finished')
-//             response.download('attendances.txt', err => console.log(err))
-//             fileStream.close();
-//         });        
-//     })
-// }
+        // fileStream.on('finish', () => {
+        //     console.log('Download finished')
+        //     response.download('attendances.txt', err => console.log(err))
+        //     fileStream.close();
+        // });        
+    })
+}
