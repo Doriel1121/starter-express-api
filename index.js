@@ -15,15 +15,16 @@ mongo.connect(`mongodb+srv://${process.env.USER_NAME}:${process.env.DB_PASSWORD}
 mongo.connection.on('open', function (ref) {
     console.log('Connected to mongo server.')
 });
-mongo.set('strictQuery', true);
+mongo.set('strictQuery', false);
 app
 .use(bodyParser.json())
 .use(cors())
 app.get('/arrival' , async (req , response) => {
     console.log(req.body);
     Attendence.getAtendence(req.body , response , allAttendence => {
-        // res.send(allAttendence);
         console.log('sssss');
+        console.log(allAttendence);
+        // res.json(allAttendence);
         // response.download('attendances.txt', err => console.log(err))
     })
         // response.download('attendances.txt', err => console.log(err))
