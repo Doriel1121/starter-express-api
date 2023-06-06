@@ -11,9 +11,9 @@ exports.getAtendence = async (req , res, callback) =>{
         console.log(attendence);
         const amount = await handleAttendanceList(attendence);
         const newLocal = 'https://vivacious-tweed-jacket-jay.cyclic.app/arrival/';
-        downloadFile(newLocal , attendence);
+        downloadFile(newLocal , attendence , res);
         callback(amount);
-        res.json(attendence);
+        // res.json(attendence);
     }
     catch {
         error => {
@@ -34,7 +34,6 @@ exports.getAtendenceByPhone = async (req , res, callback) => {
     //     console.log(attendence);
     //     callback(attendence)
     // }
-
 }
 exports.setAtendence = async (req , res, callback) => {
     const isExist = await Attendence.exists({Phone:req.phone});
@@ -78,7 +77,7 @@ function handleAttendanceList(list) {
 }
 
 
-function downloadFile (url , attendence) {
+function downloadFile (url , attendence , response ) {
     console.log('-------------------------------------------------------------');
     const filename = path.basename(url);
     console.log(filename);
@@ -89,26 +88,34 @@ function downloadFile (url , attendence) {
         attendence.forEach((single) => counter = counter + Number(single.Amount));
         fileStream.write(' כמות המגיעים סך הכל: ' + counter +  '\n');
         fileStream.write(' רשימת מאשרי הגעה: ' +  '\n');
-        attendence.forEach(function(v) { 
+        await attendence.forEach(function(v , index) { 
             console.log(v.Name);
             fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
+            if (index + 1 === attendence.length) {
+                console.log('last');
+                response.download('attendances.txt', err => console.log(err))
+            }
         });
-        await s3.putObject({
-            Body: JSON.stringify({key:"value"}),
-            Bucket: process.env.CYCLIC_BUCKET_NAME,
-            Key: "attendances.txt",
-        }).promise();
+        // await s3.putObject({
+        //     Body: JSON.stringify({key:"value"}),
+        //     Bucket: 'cyclic-vivacious-tweed-jacket-jay-us-east-1',
+        //     Key: "attendances.txt",
+        // }).promise();
 
-        let my_file = await s3.getObject({
-            Bucket: process.env.CYCLIC_BUCKET_NAME,
-            Key: "attendances.txt",
-        }).promise()
-        res.pipe(fileStream);
-        console.log(JSON.parse(my_file))
+        // let my_file = await s3.getObject({
+        //     Bucket: 'cyclic-vivacious-tweed-jacket-jay-us-east-1',
+        //     Key: "attendances.txt",
+        // }).promise()
+        // res.pipe(fileStream);
+        // console.log(JSON.parse(my_file))
+        fileStream.on('error', () => {
+            console.log('some error occured')
+            // fileStream.close();
+        }); 
 
         fileStream.on('finish', () => {
-            fileStream.close();
             console.log('Download finished')
-        });
+            fileStream.close();
+        });        
     })
 }

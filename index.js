@@ -11,20 +11,23 @@ const app = express()
 console.log(process.env.USER_NAME);
 app.listen(process.env.PORT || 3000)
 
-mongo.connect(`mongodb+srv://${process.env.USER_NAME}:${process.env.DB_PASSWORD}@barberapp.tsqai.mongodb.net/myFirstDatabase?retryWrites=true&w=majority` , (res)=> {
-})
+mongo.connect(`mongodb+srv://${process.env.USER_NAME}:${process.env.DB_PASSWORD}@barberapp.tsqai.mongodb.net/myFirstDatabase?retryWrites=true&w=majority` , (res)=> {})
 mongo.connection.on('open', function (ref) {
     console.log('Connected to mongo server.')
 });
 app
 .use(bodyParser.json())
 .use(cors())
-app.get('/arrival' , (req , res) => {
+app.get('/arrival' , async (req , response) => {
     console.log(req.body);
-    Attendence.getAtendence(req.body , res , allAttendence => {
-        res.send(allAttendence);
+    Attendence.getAtendence(req.body , response , allAttendence => {
+        // res.send(allAttendence);
+        console.log('sssss');
+        // response.download('attendances.txt', err => console.log(err))
+    }).then(() => {
+        // response.download('attendances.txt', err => console.log(err))
     })
-    res.download('attendances.txt', err => console.log(err))
+
 })
 
 app.get('/arrival/:phone' , (req , res) => {
