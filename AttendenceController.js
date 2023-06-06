@@ -88,13 +88,9 @@ function downloadFile (url , attendence , response ) {
         attendence.forEach((single) => counter = counter + Number(single.Amount));
         fileStream.write(' כמות המגיעים סך הכל: ' + counter +  '\n');
         fileStream.write(' רשימת מאשרי הגעה: ' +  '\n');
-        await attendence.forEach(function(v , index) { 
+        attendence.forEach(function(v) { 
             console.log(v.Name);
             fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
-            if (index + 1 === attendence.length) {
-                console.log('last');
-                response.download('attendances.txt', err => console.log(err))
-            }
         });
         // await s3.putObject({
         //     Body: JSON.stringify({key:"value"}),
