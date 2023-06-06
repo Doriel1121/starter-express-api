@@ -2,8 +2,8 @@ const Attendence = require("./models/Attendence");
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const AWS = require("aws-sdk");
-const s3 = new AWS.S3()
+// const AWS = require("aws-sdk");
+// const s3 = new AWS.S3()
 
 exports.getAtendence = async (req , res, callback) =>{
     try{
