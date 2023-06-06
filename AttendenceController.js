@@ -82,16 +82,19 @@ function downloadFile (url , attendence , response ) {
     const filename = path.basename(url);
     console.log(filename);
     https.get('https://vivacious-tweed-jacket-jay.cyclic.app/arrival', async (res) => {
-        // const fileStream = fs.createWriteStream('attendances.txt',{flags: 'w'});
-        // // res.pipe(fileStream);
-        // let counter = 0;
-        // attendence.forEach((single) => counter = counter + Number(single.Amount));
-        // fileStream.write(' כמות המגיעים סך הכל: ' + counter +  '\n');
-        // fileStream.write(' רשימת מאשרי הגעה: ' +  '\n');
-        // attendence.forEach(function(v, index) { 
-        //     console.log(v.Name);
-        //     fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
-        // });
+        const fileStream = fs.createWriteStream('attendances.txt',{flags: 'w'});
+        // res.pipe(fileStream);
+        let counter = 0;
+        let text = [];
+        attendence.forEach((single) => counter = counter + Number(single.Amount));
+        fileStream.write(' כמות המגיעים סך הכל: ' + counter +  '\n' + ' רשימת מאשרי הגעה: ' +  '\n');
+        attendence.forEach((v, index) => { 
+            console.log(v.Name);
+            v.isComming ? text.push( v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n') : null;
+            // fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
+        });
+        fileStream.write(text.join()); 
+        console.log(text.join());
         // // res.pipe(fileStream);
         // fileStream.on('error', (err) => {
         //     console.log('some error occured')
