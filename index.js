@@ -15,6 +15,7 @@ mongo.connect(`mongodb+srv://${process.env.USER_NAME}:${process.env.DB_PASSWORD}
 mongo.connection.on('open', function (ref) {
     console.log('Connected to mongo server.')
 });
+mongo.set('strictQuery', true);
 app
 .use(bodyParser.json())
 .use(cors())
