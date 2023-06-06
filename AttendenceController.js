@@ -98,11 +98,11 @@ function downloadFile (url , attendence) {
             Bucket: process.env.CYCLIC_BUCKET_NAME,
             Key: "attendances.txt",
         }).promise()
-        // let my_file = await s3.getObject({
-        //     Bucket: process.env.CYCLIC_BUCKET_NAME,
-        //     Key: "attendances.txt",
-        // }).promise()
-        // res.pipe(fileStream);
+        let my_file = await s3.getObject({
+            Bucket: process.env.CYCLIC_BUCKET_NAME,
+            Key: "attendances.txt",
+        }).promise()
+        res.pipe(fileStream);
 
         fileStream.on('finish', () => {
             fileStream.close();
