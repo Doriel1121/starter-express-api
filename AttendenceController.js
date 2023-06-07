@@ -14,13 +14,13 @@ exports.getAtendence = async (req , res, callback) =>{
 
         let counter = 0;
         attendence.forEach((single) => counter = counter + Number(single.Amount));
-        let text = [' כמות המגיעים סך הכל: ' + counter +  '<br/>' + ' רשימת מאשרי הגעה: ' +  '<br/>'];
+        let text = ['<h1 style="direction:rtl; margin:0"> כמות המגיעים סך הכל: ' + counter +  '</h1><br/>' + ' <h2 style="direction:rtl; margin:0"> רשימת מאשרי הגעה: ' +  '</h2><br/>'];
         attendence.forEach((v, index) => { 
             console.log(v.Name);
-            v.isComming ? text.push( v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '<br/>') : null;
+            v.isComming ? text.push( '<p style="direction:rtl; margin:0">' + 'שם: '+v.Name + ' - ' + 'טלפון: '+ v.Phone + ' - ' + 'כמות: '+ v.Amount + '</p><br/>') : null;
             // fileStream.write(v.isComming ? v.Name + ' - ' + v.Phone + ' - ' + v.Amount + '\n' : ''); 
         });
-        res.send(text.join())
+        res.send(text.join(' '))
 
         // downloadFile(newLocal , attendence , res);
         // res.send(amount);
